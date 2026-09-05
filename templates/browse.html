@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">Browse Needs & Offers</h1>
+
+<div class="listing-layout">
+  <aside class="filters">
+    <h3>Filters</h3>
+    <form method="get" action="{{ url_for('browse') }}">
+      <input type="hidden" name="q" value="{{ q }}">
+      <div class="filter-group">
+        <h4>Type</h4>
+        <label><input type="radio" name="type" value="" {% if not post_type %}checked{% endif %} onchange="this.form.submit()"> All</label>
+        <label><input type="radio" name="type" value="need" {% if post_type=='need' %}checked{% endif %} onchange="this.form.submit()"> 🙋 Needs</label>
+        <label><input type="radio" name="type" value="offer" {% if post_type=='offer' %}checked{% endif %} onchange="this.form.submit()"> 🤲 Offers</label>
+      </div>
+      <div class="filter-group">
+        <h4>Urgency</h4>
+        <label><input type="radio" name="urgency" value="" {% if not urgency %}checked{% endif %} onchange="this.form.submit()"> All</label>
+        <label><input type="radio" name="urgency" value="emergency" {% if urgency=='emergency' %}checked{% endif %} onchange="this.form.submit()"> 🚨 Emergency</label>
+        <label><input type="radio" name="urgency" value="urgent" {% if urgency=='urgent' %}checked{% endif %} onchange="this.form.submit()"> ⏱️ Urgent</label>
+        <label><input type="radio" name="urgency" value="normal" {% if urgency=='normal' %}checked{% endif %} onchange="this.form.submit()"> Normal</label>
+      </div>
+      <div class="filter-group">
+        <h4>Category</h4>
+        <label><input type="radio" name="category" value="" {% if not category_id %}checked{% endif %} onchange="this.form.submit()"> All</label>
+        {% for c in categories %}
+          <label><input type="radio" name="category" value="{{ c['id'] }}" {% if category_id == c['id'] %}checked{% endif %} onchange="this.form.submit()"> {{ c['icon'] }} {{ c['name'] }}</label>
+        {% endfor %}
+      </div>
+      <div class="filter-group">
+        <h4>Neighborhood</h4>
+        <input type="text" name="neighborhood" placeholder="e.g. Riverside" value="{{ neighborhood }}">
+        <button type="submit" class="btn btn-small">Apply</button>
+      </div>
+    </form>
+  </aside>
+
+  <div class="listing-main">
+    <div class="listing-header">
+      <span>{{ posts|length }} results {% if q %}for "{{ q }}"{% endif %}</span>
+    </div>
+    {% if posts %}
+      <div class="post-grid">
+        {% for post in posts %}
+          {% include "_post_card.html" %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty-state">Nothing matches those filters yet. <a href="{{ url_for('new_post') }}">Be the first to post</a>?</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

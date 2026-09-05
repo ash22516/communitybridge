@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}CommunityBridge – Neighbors Helping Neighbors{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="{{ url_for('index') }}" class="logo">Community<span>Bridge</span></a>
+
+    <form action="{{ url_for('browse') }}" method="get" class="search-form">
+      <input type="text" name="q" placeholder="Search needs and offers near you..." value="{{ request.args.get('q','') }}">
+      <button type="submit">🔍</button>
+    </form>
+
+    <div class="topbar-actions">
+      {% if current_user %}
+        <a href="{{ url_for('new_post', type='need') }}" class="btn btn-small btn-need">I need help</a>
+        <a href="{{ url_for('new_post', type='offer') }}" class="btn btn-small btn-offer">I can help</a>
+        <div class="dropdown">
+          <a href="#" class="topbar-link">Hi, {{ current_user['username'] }} ▾</a>
+          <div class="dropdown-menu">
+            <a href="{{ url_for('profile') }}">My Profile</a>
+            {% if current_user['is_admin'] %}<a href="{{ url_for('admin_dashboard') }}">Moderator Dashboard</a>{% endif %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+          </div>
+        </div>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="topbar-link">Login</a>
+        <a href="{{ url_for('register') }}" class="btn btn-small btn-offer">Join the community</a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+<main>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <h4>CommunityBridge</h4>
+      <p>A free, neighbor-run mutual aid network. Ask for help, offer what you can — no money changes hands here.</p>
+    </div>
+    <div>
+      <h4>In an emergency</h4>
+      <p>This platform supplements but does not replace emergency services. Always call local emergency numbers for life-threatening situations.</p>
+    </div>
+  </div>
+  <p class="copyright">© 2026 CommunityBridge — Demo project, built for community resilience.</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

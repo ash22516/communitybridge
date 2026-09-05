@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-box">
+  <h1>{{ 'Ask for help' if default_type == 'need' else 'Offer help' }}</h1>
+  <form method="post">
+    <div class="type-toggle">
+      <label class="type-option"><input type="radio" name="post_type" value="need" {% if default_type=='need' %}checked{% endif %}> 🙋 I need help</label>
+      <label class="type-option"><input type="radio" name="post_type" value="offer" {% if default_type=='offer' %}checked{% endif %}> 🤲 I can help</label>
+    </div>
+
+    <label>Title
+      <input type="text" name="title" required placeholder="Short summary, e.g. 'Need a ride to the clinic'">
+    </label>
+
+    <label>Category
+      <select name="category_id" required>
+        {% for c in categories %}<option value="{{ c['id'] }}">{{ c['icon'] }} {{ c['name'] }}</option>{% endfor %}
+      </select>
+    </label>
+
+    <label>Description
+      <textarea name="description" required rows="5" placeholder="Give enough detail for a neighbor to know how to help."></textarea>
+    </label>
+
+    <label>Neighborhood
+      <input type="text" name="neighborhood" placeholder="e.g. Riverside District" value="{{ current_user['neighborhood'] if current_user else '' }}">
+    </label>
+
+    <label>Urgency
+      <select name="urgency">
+        <option value="normal">Normal — no rush</option>
+        <option value="urgent">Urgent — needed soon</option>
+        <option value="emergency">Emergency — needed right now</option>
+      </select>
+    </label>
+
+    <button type="submit" class="btn btn-primary btn-full">Post to the community</button>
+  </form>
+</div>
+{% endblock %}

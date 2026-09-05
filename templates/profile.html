@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">My Profile</h1>
+
+<div class="profile-layout">
+  <div class="form-box">
+    <h3>Edit profile</h3>
+    <form method="post">
+      <label>Neighborhood
+        <input type="text" name="neighborhood" value="{{ user['neighborhood'] or '' }}">
+      </label>
+      <label>Phone (shared only with people you respond to / who respond to you)
+        <input type="tel" name="phone" value="{{ user['phone'] or '' }}">
+      </label>
+      <label>Bio
+        <textarea name="bio" rows="3">{{ user['bio'] or '' }}</textarea>
+      </label>
+      <label>Skills / resources you can offer
+        <input type="text" name="skills" value="{{ user['skills'] or '' }}" placeholder="e.g. Driving, tutoring, first aid">
+      </label>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+    <p class="impact-line">💛 Impact points: <strong>{{ user['impact_points'] }}</strong> (earned when someone thanks you for helping)</p>
+  </div>
+
+  <div>
+    <h3>My Posts</h3>
+    {% for p in my_posts %}
+      <a href="{{ url_for('post_detail', post_id=p['id']) }}" class="mini-row">
+        <span>{{ '🙋' if p['post_type']=='need' else '🤲' }} {{ p['title'] }}</span>
+        <span class="status-badge status-{{ p['status'] }}">{{ p['status']|replace('_',' ')|title }}</span>
+      </a>
+    {% else %}
+      <p class="empty-state">You haven't posted anything yet.</p>
+    {% endfor %}
+
+    <h3>My Responses</h3>
+    {% for r in my_responses %}
+      <a href="{{ url_for('post_detail', post_id=r['post_id']) }}" class="mini-row">
+        <span>Replied to: {{ r['title'] }}</span>
+      </a>
+    {% else %}
+      <p class="empty-state">You haven't responded to anyone yet.</p>
+    {% endfor %}
+
+    <h3>Thanks Received</h3>
+    {% for t in my_thanks %}
+      <div class="thanks-card">
+        <strong>{{ t['from_username'] }}</strong> says thanks{% if t['message'] %}: "{{ t['message'] }}"{% endif %}
+      </div>
+    {% else %}
+      <p class="empty-state">No thank-yous yet — go help a neighbor!</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

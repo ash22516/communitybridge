@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-box narrow">
+  <h1>Welcome back</h1>
+  <form method="post">
+    <label>Username or Email
+      <input type="text" name="identifier" required>
+    </label>
+    <label>Password
+      <input type="password" name="password" required>
+    </label>
+    <button type="submit" class="btn btn-primary btn-full">Login</button>
+  </form>
+  <p class="auth-switch">New to CommunityBridge? <a href="{{ url_for('register') }}">Join here</a></p>
+  <p class="hint">Demo accounts: <code>maria_h</code>, <code>tomas_r</code>, <code>aisha_k</code>, <code>ben_c</code> (password: <code>demo1234</code>) · Moderator: <code>admin</code> / <code>admin123</code></p>
+</div>
+{% endblock %}

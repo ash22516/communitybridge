@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-box narrow">
+  <h1>Join CommunityBridge</h1>
+  <form method="post">
+    <label>Username
+      <input type="text" name="username" required>
+    </label>
+    <label>Email
+      <input type="email" name="email" required>
+    </label>
+    <label>Neighborhood
+      <input type="text" name="neighborhood" placeholder="e.g. Riverside District">
+    </label>
+    <label>Password
+      <input type="password" name="password" required minlength="4">
+    </label>
+    <button type="submit" class="btn btn-primary btn-full">Join</button>
+  </form>
+  <p class="auth-switch">Already a member? <a href="{{ url_for('login') }}">Login</a></p>
+</div>
+{% endblock %}
